@@ -26,9 +26,10 @@ namespace Atleti_AspMVC.Controllers
         [HttpPost]
         public ActionResult Index(UserLoginData user)
         {
+            //non andrebbe salvata così la stringa di connessione
             #region password
             connString = "Server=DESKTOP-QJEETFU\\SQLEXPRESSNEW;Database=Olympics;User Id=sa;Password=albania4Ever";
-            #endregion //non andrebbe salvato così
+            #endregion
 
             if (user == null || user.Password == null || String.IsNullOrEmpty(user.UserName) || String.IsNullOrEmpty(user.Password))
             {
