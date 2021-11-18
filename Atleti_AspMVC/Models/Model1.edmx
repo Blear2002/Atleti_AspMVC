@@ -1,0 +1,248 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="OlympicsModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Athletes">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="255" />
+          <Property Name="fk_Nationality" Type="int" />
+          <Property Name="Sex" Type="varchar" MaxLength="10" />
+          <Property Name="Dob" Type="date" />
+          <Property Name="Height" Type="float" />
+          <Property Name="Weight" Type="float" />
+          <Property Name="FK_Sport" Type="int" Nullable="false" />
+          <Property Name="gold" Type="int" />
+          <Property Name="silver" Type="int" />
+          <Property Name="bronze" Type="int" />
+        </EntityType>
+        <EntityType Name="Nationalities">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Code" Type="varchar" MaxLength="255" />
+          <Property Name="Name" Type="varchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="Sports">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="255" />
+        </EntityType>
+        <!--Errori trovati durante la generazione:
+avviso 6002: Nessuna chiave primaria definita per la tabella/visualizzazione 'Olympics.dbo.Users'. La chiave è stata dedotta e la definizione è stata creata come tabella/visualizzazione di sola lettura.-->
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="UserName" />
+            <PropertyRef Name="Password" />
+          </Key>
+          <Property Name="UserName" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="Password" Type="varchar" MaxLength="1024" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Athlets_Nationalities">
+          <End Role="Nationalities" Type="Self.Nationalities" Multiplicity="0..1" />
+          <End Role="Athletes" Type="Self.Athletes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Nationalities">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Athletes">
+              <PropertyRef Name="fk_Nationality" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Athlets_Sports">
+          <End Role="Sports" Type="Self.Sports" Multiplicity="1" />
+          <End Role="Athletes" Type="Self.Athletes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Sports">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Athletes">
+              <PropertyRef Name="FK_Sport" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="OlympicsModelStoreContainer">
+          <EntitySet Name="Athletes" EntityType="Self.Athletes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Nationalities" EntityType="Self.Nationalities" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Sports" EntityType="Self.Sports" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Users" EntityType="Self.Users" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [Users].[UserName] AS [UserName], 
+    [Users].[Password] AS [Password]
+    FROM [dbo].[Users] AS [Users]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_Athlets_Nationalities" Association="Self.FK_Athlets_Nationalities">
+            <End Role="Nationalities" EntitySet="Nationalities" />
+            <End Role="Athletes" EntitySet="Athletes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Athlets_Sports" Association="Self.FK_Athlets_Sports">
+            <End Role="Sports" EntitySet="Sports" />
+            <End Role="Athletes" EntitySet="Athletes" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="OlympicsModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Nationality">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Code" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Athletes" Relationship="OlympicsModel.FK_Athlets_Nationalities" FromRole="Nationality" ToRole="Athlete" />
+        </EntityType>
+        <EntityContainer Name="OlympicsEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Nationalities" EntityType="Self.Nationality" />
+          <EntitySet Name="Athletes" EntityType="OlympicsModel.Athlete" />
+          <EntitySet Name="Sports" EntityType="OlympicsModel.Sport" />
+          <AssociationSet Name="FK_Athlets_Nationalities" Association="OlympicsModel.FK_Athlets_Nationalities">
+            <End Role="Nationality" EntitySet="Nationalities" />
+            <End Role="Athlete" EntitySet="Athletes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Athlets_Sports" Association="OlympicsModel.FK_Athlets_Sports">
+            <End Role="Sport" EntitySet="Sports" />
+            <End Role="Athlete" EntitySet="Athletes" />
+          </AssociationSet>
+          <EntitySet Name="Users" EntityType="OlympicsModel.User" />
+        </EntityContainer>
+        <EntityType Name="Athlete">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="fk_Nationality" Type="Int32" />
+          <Property Name="Sex" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Dob" Type="DateTime" Precision="0" />
+          <Property Name="Height" Type="Double" />
+          <Property Name="Weight" Type="Double" />
+          <Property Name="FK_Sport" Type="Int32" Nullable="false" />
+          <Property Name="gold" Type="Int32" />
+          <Property Name="silver" Type="Int32" />
+          <Property Name="bronze" Type="Int32" />
+          <NavigationProperty Name="Nationality" Relationship="OlympicsModel.FK_Athlets_Nationalities" FromRole="Athlete" ToRole="Nationality" />
+          <NavigationProperty Name="Sport" Relationship="OlympicsModel.FK_Athlets_Sports" FromRole="Athlete" ToRole="Sport" />
+        </EntityType>
+        <EntityType Name="Sport">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Athletes" Relationship="OlympicsModel.FK_Athlets_Sports" FromRole="Sport" ToRole="Athlete" />
+        </EntityType>
+        <Association Name="FK_Athlets_Nationalities">
+          <End Type="OlympicsModel.Nationality" Role="Nationality" Multiplicity="0..1" />
+          <End Type="OlympicsModel.Athlete" Role="Athlete" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Nationality">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Athlete">
+              <PropertyRef Name="fk_Nationality" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Athlets_Sports">
+          <End Type="OlympicsModel.Sport" Role="Sport" Multiplicity="1" />
+          <End Type="OlympicsModel.Athlete" Role="Athlete" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Sport">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Athlete">
+              <PropertyRef Name="FK_Sport" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="UserName" />
+            <PropertyRef Name="Password" />
+          </Key>
+          <Property Name="UserName" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Password" Type="String" Nullable="false" MaxLength="1024" FixedLength="false" Unicode="false" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="OlympicsModelStoreContainer" CdmEntityContainer="OlympicsEntities">
+          <EntitySetMapping Name="Nationalities">
+            <EntityTypeMapping TypeName="OlympicsModel.Nationality">
+              <MappingFragment StoreEntitySet="Nationalities">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Athletes">
+            <EntityTypeMapping TypeName="OlympicsModel.Athlete">
+              <MappingFragment StoreEntitySet="Athletes">
+                <ScalarProperty Name="bronze" ColumnName="bronze" />
+                <ScalarProperty Name="silver" ColumnName="silver" />
+                <ScalarProperty Name="gold" ColumnName="gold" />
+                <ScalarProperty Name="FK_Sport" ColumnName="FK_Sport" />
+                <ScalarProperty Name="Weight" ColumnName="Weight" />
+                <ScalarProperty Name="Height" ColumnName="Height" />
+                <ScalarProperty Name="Dob" ColumnName="Dob" />
+                <ScalarProperty Name="Sex" ColumnName="Sex" />
+                <ScalarProperty Name="fk_Nationality" ColumnName="fk_Nationality" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Sports">
+            <EntityTypeMapping TypeName="OlympicsModel.Sport">
+              <MappingFragment StoreEntitySet="Sports">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="OlympicsModel.User">
+              <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Nessuno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

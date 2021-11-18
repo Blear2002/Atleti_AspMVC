@@ -1,0 +1,17 @@
+﻿@model Atleti_AspMVC.Models.AthleteSearch
+
+@{
+    ViewBag.Title = "Search";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Search</h2>
+
+@Html.Partial("SearchPV")
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+
+

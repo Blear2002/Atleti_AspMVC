@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="37c46a7f63d34c1892266d862e2f77de" Name="Diagram1">
+        <EntityTypeShape EntityType="OlympicsModel.Nationality" Width="1.875" PointX="1" PointY="0.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="OlympicsModel.Athlete" Width="1.5" PointX="3.625" PointY="0.75" />
+        <EntityTypeShape EntityType="OlympicsModel.Sport" Width="1.5" PointX="1.375" PointY="4.875" />
+        <AssociationConnector Association="OlympicsModel.FK_Athlets_Nationalities" />
+        <AssociationConnector Association="OlympicsModel.FK_Athlets_Sports" />
+        <EntityTypeShape EntityType="OlympicsModel.User" Width="1.5" PointX="3.375" PointY="5.75" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

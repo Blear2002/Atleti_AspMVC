@@ -1,0 +1,45 @@
+﻿@model Atleti_AspMVC.ViewModels.NationsListViewModel
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+@Html.ActionLink("Nuova nazione", "Create")
+<table class="table">
+    <thead>
+        <tr>
+            <!-- intestazione tabella -->
+            <td>ID</td>
+            <td>Code</td>
+            <td>Name</td>
+            <td>Details | Edit</td>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var o in Model.Nations)
+        {
+            <tr>
+                <td>@o.Id</td>
+                <td>@o.Code</td>
+                <td>@o.Name</td>
+                <td>
+                    @Html.ActionLink("Dettaglio", "Details", new { id = o.Id })
+                    |
+                    @Html.ActionLink("Edit", "Edit", new { id = o.Id })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<ul class="pagination">
+    @for (int i = 1; i <= Model.Pages; i++)
+    {
+        <li>
+            @Html.ActionLink(i.ToString(), "Index", new { id = i })
+        </li>
+    }
+</ul>
+
+@Html.Partial("CountPV", Model.Nations)
