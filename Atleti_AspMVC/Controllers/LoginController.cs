@@ -27,8 +27,8 @@ namespace Atleti_AspMVC.Controllers
         public ActionResult Index(UserLoginData user)
         {
             #region password
-            connString = "Server=DESKTOP-QJEETFU\\SQLEXPRESSNEW;Database=Olympics;User Id=sa;Password=Blear.hoxha2";
-            #endregion
+            connString = "Server=DESKTOP-QJEETFU\\SQLEXPRESSNEW;Database=Olympics;User Id=sa;Password=albania4Ever";
+            #endregion //non andrebbe salvato così
 
             if (user == null || user.Password == null || String.IsNullOrEmpty(user.UserName) || String.IsNullOrEmpty(user.Password))
             {
@@ -47,22 +47,13 @@ namespace Atleti_AspMVC.Controllers
                     SqlDataReader dr = comando.ExecuteReader();
                     if (dr.HasRows)
                     {
-                        righe++;                       
-                    }
-                    connessione.Close();
-
-                    if (righe != 1)
-                    {
-                        return RedirectToAction("Index","Home");
-                    }
-                    else if(righe==1)
-                    {
-                        return RedirectToAction("Index","Athletes");
+                        return RedirectToAction("Index", "Athletes");
                     }
                     else
                     {
-                        return RedirectToAction("Index");
+                        return RedirectToAction("Index", "Home");
                     }
+                    connessione.Close();
                 }
             }
         }
